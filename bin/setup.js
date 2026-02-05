@@ -14,6 +14,127 @@ try {
 
 const OPENCLAW_CONFIG = path.join(os.homedir(), '.openclaw/openclaw.json');
 
+const PLATFORM_DEPENDENCIES = {
+  telegram: [],
+  discord: [],
+  slack: [],
+  whatsapp: ['whatsapp-web.js', 'qrcode-terminal', 'puppeteer'],
+  signal: ['axios'],
+  matrix: ['matrix-bot-sdk'],
+  mattermost: ['axios'],
+  googlechat: ['axios', 'jsonwebtoken'],
+  msteams: ['axios'],
+  line: ['axios'],
+  zalo: ['axios'],
+  imessage: [],
+  bluebubbles: ['axios'],
+  nextcloud: ['axios'],
+  nostr: ['nostr-tools'],
+  twitch: ['axios'],
+  tlon: ['axios']
+};
+
+const EXTERNAL_DEPENDENCIES = {
+  signal: ['signal-cli (https://github.com/AsamK/signal-cli)'],
+  imessage: ['macOS with AppleScript support']
+};
+
+async function checkDependency(pkg) {
+  try {
+    require.resolve(pkg);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function installDependencies(platforms) {
+  const depsToInstall = new Set();
+  const externalDeps = [];
+  
+  for (const platform of platforms) {
+    const deps = PLATFORM_DEPENDENCIES[platform] || [];
+    for (const dep of deps) {
+      if (!await checkDependency(dep)) {
+        depsToInstall.add(dep);
+      }
+    }
+    
+    if (EXTERNAL_DEPENDENCIES[platform]) {
+      externalDeps.push(...EXTERNAL_DEPENDENCIES[platform]);
+    }
+  }
+  
+  if (depsToInstall.size > 0) {
+    console.log('\n📦 Installing platform dependencies...');
+    const deps = Array.from(depsToInstall).join(' ');
+    
+    try {
+      execSync(`npm install -g ${deps}`, { stdio: 'inherit' });
+      console.log('✅ Dependencies installed successfully');
+    } catch (err) {
+      console.error('❌ Failed to install dependencies:', err.message);
+      console.log('Try running manually: npm install -g', deps);
+    }
+  }
+  
+  if (externalDeps.length > 0) {
+    console.log('\n⚠️  External dependencies required:');
+    externalDeps.forEach(dep => console.log(`  - ${dep}`));
+  }
+}
+
+async function checkOpencodeInstallation() {
+  try {
+    execSync('which opencode', { stdio: 'pipe' });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function installOpencode() {
+  console.log('\n🔧 OpenCode CLI is required but not found.');
+  
+  if (clack) {
+    const shouldInstall = await clack.confirm({
+      message: 'Install OpenCode CLI now?',
+      initialValue: true
+    });
+    
+    if (shouldInstall) {
+      console.log('\n📦 Installing OpenCode CLI...');
+      try {
+        execSync('npm install -g opencode', { stdio: 'inherit' });
+        console.log('✅ OpenCode CLI installed');
+        return true;
+      } catch (err) {
+        console.error('❌ Failed to install OpenCode:', err.message);
+        return false;
+      }
+    }
+  } else {
+    const readline = require('readline');
+    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+    const answer = await new Promise(r => rl.question('Install OpenCode CLI? (y/n): ', r));
+    rl.close();
+    
+    if (answer.toLowerCase() === 'y') {
+      console.log('\n📦 Installing OpenCode CLI...');
+      try {
+        execSync('npm install -g opencode', { stdio: 'inherit' });
+        console.log('✅ OpenCode CLI installed');
+        return true;
+      } catch (err) {
+        console.error('❌ Failed to install OpenCode:', err.message);
+        return false;
+      }
+    }
+  }
+  
+  return false;
+}
+
 async function importFromOpenClaw() {
   if (!fs.existsSync(OPENCLAW_CONFIG)) {
     return null;
@@ -82,6 +203,17 @@ async function importFromOpenClaw() {
 
 async function interactiveSetup() {
   console.log('\n🚀 opencode-bot Setup\n');
+  
+  const hasOpencode = await checkOpencodeInstallation();
+  if (!hasOpencode) {
+    const installed = await installOpencode();
+    if (!installed) {
+      console.log('\n⚠️  OpenCode CLI is required to use opencode-bot.');
+      console.log('Install manually: npm install -g opencode\n');
+    }
+  } else {
+    console.log('✅ OpenCode CLI found');
+  }
   
   let config = ConfigManager.load();
   
@@ -167,6 +299,8 @@ async function setupWithClack(config) {
     }
   }
 
+  await installDependencies(selected);
+  
   clack.outro('🎉 Setup complete! Run: opencode-bot');
 }
 
@@ -206,6 +340,9 @@ async function setupWithReadline(config) {
       console.log(`❌ ${info.name} failed: ${err.message}\n`);
     }
   }
+
+  const selectedPlatforms = indices.map(idx => platforms[idx]).filter(Boolean);
+  await installDependencies(selectedPlatforms);
 
   rl.close();
   console.log('\n🎉 Setup complete! Run: opencode-bot\n');

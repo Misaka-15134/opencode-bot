@@ -53,8 +53,15 @@ Or just type any message to chat with OpenCode!
 ## 📦 Requirements
 
 - Node.js >= 18
-- OpenCode CLI
+- OpenCode CLI (auto-installed if missing)
 - Platform bot tokens
+
+## 🔧 Auto-Installation
+
+`opencode-bot-setup` automatically installs:
+- ✅ OpenCode CLI (if not found)
+- ✅ Platform-specific npm packages
+- ⚠️ External binaries (manual install required for Signal, iMessage)
 
 ## 🔒 Security
 
