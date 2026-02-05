@@ -1,6 +1,8 @@
 const { BridgeCore } = require('./core/bridge');
 const { ConfigManager, SUPPORTED_PLATFORMS } = require('./core/config');
 const { TelegramAdapter } = require('./adapters/telegram');
+const { DiscordAdapter } = require('./adapters/discord');
+const { SlackAdapter } = require('./adapters/slack');
 
 async function main() {
   const config = ConfigManager.load();
@@ -29,10 +31,14 @@ async function main() {
           console.log(`✓ ${SUPPORTED_PLATFORMS.telegram.icon} Telegram connected`);
           break;
         case 'discord':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.discord.icon} Discord (v1.1)`);
+          const dc = new DiscordAdapter(platform, core);
+          await dc.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.discord.icon} Discord connected`);
           break;
         case 'slack':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.slack.icon} Slack (v1.2)`);
+          const slack = new SlackAdapter(platform, core);
+          await slack.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.slack.icon} Slack connected`);
           break;
         case 'whatsapp':
           console.log(`⏳ ${SUPPORTED_PLATFORMS.whatsapp.icon} WhatsApp (v1.3)`);
