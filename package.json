@@ -1,0 +1,25 @@
+{
+  "name": "opencode-bot",
+  "version": "1.0.0",
+  "description": "Multi-platform bridge connecting OpenCode to messaging apps (Telegram, Discord, Slack)",
+  "main": "src/index.js",
+  "bin": {
+    "opencode-bot": "./bin/opencode-bot.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "setup": "node src/setup.js"
+  },
+  "keywords": ["opencode", "telegram", "discord", "slack", "ai", "bridge", "bot"],
+  "author": "Antigravity",
+  "license": "MIT",
+  "dependencies": {
+    "@lydell/node-pty": "^1.2.0-beta.3",
+    "grammy": "^1.39.3",
+    "discord.js": "^14.14.1",
+    "@slack/bolt": "^3.17.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
