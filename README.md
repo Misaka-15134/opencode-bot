@@ -8,7 +8,20 @@ Run OpenCode from Telegram, Discord, Slack, WhatsApp, and 13 more platforms.
 
 ## ✨ Features
 
-- **17 Platforms**: Telegram, Discord, Slack, WhatsApp, Signal, Matrix, Mattermost, Google Chat, Teams, LINE, Zalo, iMessage, BlueBubbles, Nextcloud, Nostr, Twitch, Tlon
+### ✅ All 17 Platforms Ready
+
+| Platform | Status | Platform | Status |
+|----------|--------|----------|--------|
+| 📱 Telegram | ✅ Ready | 📋 Mattermost | ✅ Ready |
+| 🎮 Discord | ✅ Ready | 💬 Google Chat | ✅ Ready |
+| 💼 Slack | ✅ Ready | 🔷 Microsoft Teams | ✅ Ready |
+| 💬 WhatsApp | ✅ Ready | 📱 LINE | ✅ Ready |
+| 🔒 Signal | ✅ Ready | 💬 Zalo | ✅ Ready |
+| 🔷 Matrix | ✅ Ready | 💬 iMessage | ✅ Ready |
+| ☁️ Nextcloud Talk | ✅ Ready | 🔵 BlueBubbles | ✅ Ready |
+| ⚡ Nostr | ✅ Ready | 📺 Twitch | ✅ Ready |
+| 🌐 Tlon | ✅ Ready | | |
+
 - **Agent Support**: Sisyphus, Hephaestus, Prometheus, Oracle, Metis, Momus
 - **Model Switching**: Gemini, Claude, DeepSeek
 - **Session Management**: Multiple conversation contexts
