@@ -1,190 +1,53 @@
 # opencode-bot
 
-🚀 **Universal bridge connecting OpenCode to 17+ messaging platforms**
+🚀 **OpenCode in your favorite chat apps**
 
-Inspired by OpenClaw's multi-platform architecture, opencode-bot brings OpenCode's power to Telegram, Discord, Slack, WhatsApp, Signal, Matrix, and more.
+Run OpenCode from Telegram, Discord, Slack, WhatsApp, and 13 more platforms.
 
-[中文](docs/README.zh-CN.md) | [日本語](docs/README.ja.md) | [한국어](docs/README.ko.md) | [Français](docs/README.fr.md) | [Deutsch](docs/README.de.md)
+[中文](docs/README.zh-CN.md) | [日本語](docs/README.ja.md) | [한국어](docs/README.ko.md)
 
 ## ✨ Features
 
-### 🤖 Multi-Platform Support
-
-| Platform | Status | Version |
-|----------|--------|---------|
-| 📱 Telegram | ✅ Ready | v1.0 |
-| 🎮 Discord | 🚧 Planned | v1.1 |
-| 💼 Slack | 🚧 Planned | v1.2 |
-| 💬 WhatsApp | 🚧 Planned | v1.3 |
-| 🔒 Signal | 🚧 Planned | v1.4 |
-| 🔷 Matrix | 🚧 Planned | v1.5 |
-| 📋 Mattermost | 🚧 Planned | v1.6 |
-| 💬 Google Chat | 🚧 Planned | v1.7 |
-| 🔷 Microsoft Teams | 🚧 Planned | v1.8 |
-| 📱 LINE | 🚧 Planned | v1.9 |
-| 💬 Zalo | 🚧 Planned | v2.0 |
-| 💬 iMessage | 🚧 Planned | v2.1 |
-| 🔵 BlueBubbles | 🚧 Planned | v2.2 |
-| ☁️ Nextcloud Talk | 🚧 Planned | v2.3 |
-| ⚡ Nostr | 🚧 Planned | v2.4 |
-| 📺 Twitch | 🚧 Planned | v2.5 |
-| 🌐 Tlon | 🚧 Planned | v2.6 |
-
-### 🎮 Smart Controls
-
-- **Agent Selection**: Switch between Sisyphus, Hephaestus, Prometheus, Oracle, Metis, Momus
-- **Model Switching**: Quick access to Gemini, Claude, DeepSeek
-- **Session Management**: Create, switch, and manage multiple conversation contexts
-- **System Tools**: Direct access to doctor, plugins, auth, config
-
-## 📦 Installation
-
-```bash
-npm install -g opencode-bot
-```
+- **17 Platforms**: Telegram, Discord, Slack, WhatsApp, Signal, Matrix, Mattermost, Google Chat, Teams, LINE, Zalo, iMessage, BlueBubbles, Nextcloud, Nostr, Twitch, Tlon
+- **Agent Support**: Sisyphus, Hephaestus, Prometheus, Oracle, Metis, Momus
+- **Model Switching**: Gemini, Claude, DeepSeek
+- **Session Management**: Multiple conversation contexts
+- **OpenClaw Import**: Auto-import your existing config
 
 ## 🚀 Quick Start
 
-### 1. Interactive Setup
-
 ```bash
+# Install
+npm install -g opencode-bot
+
+# Setup
 opencode-bot-setup
-```
 
-The setup wizard will:
-- Detect existing OpenClaw configuration and offer to import
-- Let you select platforms with arrow keys (Space to select, Enter to confirm)
-- Configure each platform's credentials
-
-### 2. Start the Bot
-
-```bash
+# Run
 opencode-bot
 ```
 
-### 3. Use in Your Messaging App
+## 🎮 Usage
 
-- Send `/menu` to open the control panel
-- Select **🤖 Agents** to choose your AI assistant
-- Select **🧠 Models** to switch AI models
-- Select **💬 Sessions** to manage conversation contexts
-- Type any message to chat with OpenCode
+Send `/menu` in any connected chat app to access:
+- **Agents** - Switch AI assistants
+- **Models** - Change AI model
+- **Sessions** - Manage conversations
+- **Tools** - Doctor, plugins, auth, config
 
-## 🎮 Commands
+Or just type any message to chat with OpenCode!
 
-| Command | Description |
-|---------|-------------|
-| `/menu` | Open control panel |
-| `/new` | Create new session |
-| `/start` | Show welcome message |
-
-## 🤖 Available Agents
-
-| Agent | Description |
-|-------|-------------|
-| Sisyphus | Task executor |
-| Hephaestus | Code crafter |
-| Prometheus | Planner |
-| Oracle | Consultant |
-| Metis | Pre-planning consultant |
-| Momus | Quality reviewer |
-
-*Requires oh-my-opencode to be installed*
-
-## 🛠 Menu Options
-
-### 🤖 Agents
-Select from available OpenCode agents
-
-### 🧠 Models
-- Gemini 3 Flash (fast)
-- Gemini 3 Pro (powerful)
-- Claude 3.5 Sonnet
-- DeepSeek R1
-
-### 💬 Sessions
-- View recent sessions
-- Switch between contexts
-- Create new sessions
-
-### 🛠 System Tools
-- 🩺 Doctor - Health check
-- 📦 Plugins - Manage plugins
-- 🔑 Auth - Authentication
-- ⚙️ Config - Configuration
-
-## 📁 Configuration
-
-Config file: `~/.config/opencode-bot/config.json`
-
-```json
-{
-  "platforms": [
-    {
-      "type": "telegram",
-      "enabled": true,
-      "token": "YOUR_BOT_TOKEN"
-    }
-  ],
-  "opencode": {
-    "defaultModel": "google/antigravity-gemini-3-flash",
-    "defaultAgent": null
-  },
-  "agents": {
-    "sisyphus": { "name": "Sisyphus", "enabled": true },
-    "hephaestus": { "name": "Hephaestus", "enabled": true }
-  }
-}
-```
-
-## 🔧 Requirements
+## 📦 Requirements
 
 - Node.js >= 18
-- OpenCode CLI installed
-- oh-my-opencode (optional, for agents)
-- Platform-specific credentials (bot tokens, etc.)
+- OpenCode CLI
+- Platform bot tokens
 
-## 🏗 Architecture
+## 🔒 Security
 
-```
-opencode-bot/
-├── src/
-│   ├── adapters/          # Platform adapters (like OpenClaw extensions)
-│   │   ├── telegram.js    # ✅ Implemented
-│   │   ├── discord.js     # 🚧 Planned
-│   │   └── slack.js       # 🚧 Planned
-│   ├── core/
-│   │   ├── bridge.js      # PTY bridge to OpenCode
-│   │   └── config.js      # Configuration management
-│   └── index.js           # Entry point
-├── bin/
-│   └── setup.js           # Interactive setup
-└── package.json
-```
-
-## 📝 Roadmap
-
-- [x] Telegram support
-- [ ] Discord support (v1.1)
-- [ ] Slack support (v1.2)
-- [ ] WhatsApp support (v1.3)
-- [ ] Signal support (v1.4)
-- [ ] Matrix support (v1.5)
-- [ ] Mattermost support (v1.6)
-- [ ] Google Chat support (v1.7)
-- [ ] Microsoft Teams support (v1.8)
-- [ ] LINE support (v1.9)
-- [ ] Zalo support (v2.0)
-- [ ] iMessage support (v2.1)
-- [ ] BlueBubbles support (v2.2)
-- [ ] Nextcloud Talk support (v2.3)
-- [ ] Nostr support (v2.4)
-- [ ] Twitch support (v2.5)
-- [ ] Tlon support (v2.6)
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+- No hardcoded credentials
+- Config stored in `~/.config/opencode-bot/`
+- Tokens never committed to git
 
 ## 📄 License
 
@@ -192,4 +55,4 @@ MIT
 
 ## 🙏 Credits
 
-Inspired by [OpenClaw](https://openclaw.ai)'s multi-platform architecture.
+Inspired by [OpenClaw](https://openclaw.ai)
