@@ -4,6 +4,8 @@
 
 Inspired by OpenClaw's multi-platform architecture, opencode-bot brings OpenCode's power to Telegram, Discord, Slack, WhatsApp, Signal, Matrix, and more.
 
+[中文](docs/README.zh-CN.md) | [日本語](docs/README.ja.md) | [한국어](docs/README.ko.md) | [Français](docs/README.fr.md) | [Deutsch](docs/README.de.md)
+
 ## ✨ Features
 
 ### 🤖 Multi-Platform Support
@@ -49,7 +51,10 @@ npm install -g opencode-bot
 opencode-bot-setup
 ```
 
-Choose which platforms to enable and enter their credentials.
+The setup wizard will:
+- Detect existing OpenClaw configuration and offer to import
+- Let you select platforms with arrow keys (Space to select, Enter to confirm)
+- Configure each platform's credentials
 
 ### 2. Start the Bot
 
@@ -62,7 +67,7 @@ opencode-bot
 - Send `/menu` to open the control panel
 - Select **🤖 Agents** to choose your AI assistant
 - Select **🧠 Models** to switch AI models
-- Select **💬 Sessions** to manage conversations
+- Select **💬 Sessions** to manage conversation contexts
 - Type any message to chat with OpenCode
 
 ## 🎮 Commands
@@ -176,6 +181,10 @@ opencode-bot/
 - [ ] Nostr support (v2.4)
 - [ ] Twitch support (v2.5)
 - [ ] Tlon support (v2.6)
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 
