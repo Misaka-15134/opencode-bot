@@ -10,14 +10,23 @@
     "start": "node src/index.js",
     "setup": "node src/setup.js"
   },
-  "keywords": ["opencode", "telegram", "discord", "slack", "ai", "bridge", "bot"],
+  "keywords": [
+    "opencode",
+    "telegram",
+    "discord",
+    "slack",
+    "ai",
+    "bridge",
+    "bot"
+  ],
   "author": "Antigravity",
   "license": "MIT",
   "dependencies": {
+    "@clack/prompts": "^1.0.0",
     "@lydell/node-pty": "^1.2.0-beta.3",
-    "grammy": "^1.39.3",
+    "@slack/bolt": "^3.17.1",
     "discord.js": "^14.14.1",
-    "@slack/bolt": "^3.17.1"
+    "grammy": "^1.39.3"
   },
   "engines": {
     "node": ">=18.0.0"
