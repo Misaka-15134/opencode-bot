@@ -6,6 +6,17 @@ const { SlackAdapter } = require('./adapters/slack');
 const { WhatsAppAdapter } = require('./adapters/whatsapp');
 const { MatrixAdapter } = require('./adapters/matrix');
 const { SignalAdapter } = require('./adapters/signal');
+const { MattermostAdapter } = require('./adapters/mattermost');
+const { GoogleChatAdapter } = require('./adapters/googlechat');
+const { MSTeamsAdapter } = require('./adapters/msteams');
+const { LineAdapter } = require('./adapters/line');
+const { ZaloAdapter } = require('./adapters/zalo');
+const { IMessageAdapter } = require('./adapters/imessage');
+const { BlueBubblesAdapter } = require('./adapters/bluebubbles');
+const { NextcloudAdapter } = require('./adapters/nextcloud');
+const { NostrAdapter } = require('./adapters/nostr');
+const { TwitchAdapter } = require('./adapters/twitch');
+const { TlonAdapter } = require('./adapters/tlon');
 
 async function main() {
   const config = ConfigManager.load();
@@ -59,37 +70,59 @@ async function main() {
           console.log(`✓ ${SUPPORTED_PLATFORMS.matrix.icon} Matrix connected`);
           break;
         case 'mattermost':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.mattermost.icon} Mattermost (v1.6)`);
+          const mm = new MattermostAdapter(platform, core);
+          await mm.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.mattermost.icon} Mattermost connected`);
           break;
         case 'googlechat':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.googlechat.icon} Google Chat (v1.7)`);
+          const gc = new GoogleChatAdapter(platform, core);
+          await gc.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.googlechat.icon} Google Chat connected`);
           break;
         case 'msteams':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.msteams.icon} Microsoft Teams (v1.8)`);
+          const teams = new MSTeamsAdapter(platform, core);
+          await teams.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.msteams.icon} Microsoft Teams connected`);
           break;
         case 'line':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.line.icon} LINE (v1.9)`);
+          const line = new LineAdapter(platform, core);
+          await line.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.line.icon} LINE connected`);
           break;
         case 'zalo':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.zalo.icon} Zalo (v2.0)`);
+          const zalo = new ZaloAdapter(platform, core);
+          await zalo.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.zalo.icon} Zalo connected`);
           break;
         case 'imessage':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.imessage.icon} iMessage (v2.1)`);
+          const imsg = new IMessageAdapter(platform, core);
+          await imsg.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.imessage.icon} iMessage connected`);
           break;
         case 'bluebubbles':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.bluebubbles.icon} BlueBubbles (v2.2)`);
+          const bb = new BlueBubblesAdapter(platform, core);
+          await bb.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.bluebubbles.icon} BlueBubbles connected`);
           break;
         case 'nextcloud':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.nextcloud.icon} Nextcloud Talk (v2.3)`);
+          const nc = new NextcloudAdapter(platform, core);
+          await nc.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.nextcloud.icon} Nextcloud Talk connected`);
           break;
         case 'nostr':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.nostr.icon} Nostr (v2.4)`);
+          const nostr = new NostrAdapter(platform, core);
+          await nostr.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.nostr.icon} Nostr connected`);
           break;
         case 'twitch':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.twitch.icon} Twitch (v2.5)`);
+          const twitch = new TwitchAdapter(platform, core);
+          await twitch.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.twitch.icon} Twitch connected`);
           break;
         case 'tlon':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.tlon.icon} Tlon (v2.6)`);
+          const tlon = new TlonAdapter(platform, core);
+          await tlon.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.tlon.icon} Tlon connected`);
           break;
         default:
           console.log(`⚠️  Unknown platform: ${platform.type}`);
