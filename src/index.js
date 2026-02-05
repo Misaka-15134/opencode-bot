@@ -3,6 +3,9 @@ const { ConfigManager, SUPPORTED_PLATFORMS } = require('./core/config');
 const { TelegramAdapter } = require('./adapters/telegram');
 const { DiscordAdapter } = require('./adapters/discord');
 const { SlackAdapter } = require('./adapters/slack');
+const { WhatsAppAdapter } = require('./adapters/whatsapp');
+const { MatrixAdapter } = require('./adapters/matrix');
+const { SignalAdapter } = require('./adapters/signal');
 
 async function main() {
   const config = ConfigManager.load();
@@ -41,13 +44,19 @@ async function main() {
           console.log(`✓ ${SUPPORTED_PLATFORMS.slack.icon} Slack connected`);
           break;
         case 'whatsapp':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.whatsapp.icon} WhatsApp (v1.3)`);
+          const wa = new WhatsAppAdapter(platform, core);
+          await wa.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.whatsapp.icon} WhatsApp connected`);
           break;
         case 'signal':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.signal.icon} Signal (v1.4)`);
+          const sig = new SignalAdapter(platform, core);
+          await sig.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.signal.icon} Signal connected`);
           break;
         case 'matrix':
-          console.log(`⏳ ${SUPPORTED_PLATFORMS.matrix.icon} Matrix (v1.5)`);
+          const mtx = new MatrixAdapter(platform, core);
+          await mtx.start();
+          console.log(`✓ ${SUPPORTED_PLATFORMS.matrix.icon} Matrix connected`);
           break;
         case 'mattermost':
           console.log(`⏳ ${SUPPORTED_PLATFORMS.mattermost.icon} Mattermost (v1.6)`);
