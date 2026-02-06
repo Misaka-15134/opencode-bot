@@ -6,12 +6,44 @@ const { execSync } = require('child_process');
 const { ConfigManager } = require('./config');
 
 const SESSION_DIR = path.join(os.homedir(), '.local/share/opencode/storage/session/global');
+const SESSION_MAP_PATH = path.join(os.homedir(), '.config/opencode-bot/session-map.json');
 
 class BridgeCore {
   constructor(config) {
     this.config = config;
     this.opencodePath = ConfigManager.getOpencodePath();
-    this.sessionMap = {};
+    this.sessionMap = this._loadSessionMap();
+    this.activeProcesses = new Map();
+  }
+
+  _loadSessionMap() {
+    try {
+      if (fs.existsSync(SESSION_MAP_PATH)) {
+        return JSON.parse(fs.readFileSync(SESSION_MAP_PATH, 'utf8'));
+      }
+    } catch (e) {
+      console.error('Failed to load session map:', e.message);
+    }
+    return {};
+  }
+
+  _saveSessionMap() {
+    try {
+      fs.mkdirSync(path.dirname(SESSION_MAP_PATH), { recursive: true });
+      fs.writeFileSync(SESSION_MAP_PATH, JSON.stringify(this.sessionMap, null, 2));
+    } catch (e) {
+      console.error('Failed to save session map:', e.message);
+    }
+  }
+
+  stopProcess(chatId) {
+    const proc = this.activeProcesses.get(chatId);
+    if (proc) {
+      proc.kill();
+      this.activeProcesses.delete(chatId);
+      return true;
+    }
+    return false;
   }
 
   setModel(model) {
@@ -33,6 +65,7 @@ class BridgeCore {
   createSession(chatId) {
     const randomId = `ses_${Date.now().toString(36)}_${Math.random().toString(36).substr(2, 5)}`;
     this.sessionMap[chatId] = randomId;
+    this._saveSessionMap();
     
     const sessionFile = path.join(SESSION_DIR, `${randomId}.json`);
     const now = Date.now();
@@ -98,6 +131,8 @@ class BridgeCore {
 
   _spawn(chatId, args, adapter) {
     return new Promise((resolve) => {
+      this.stopProcess(chatId);
+
       const ptyProcess = pty.spawn(this.opencodePath, args, {
         name: 'xterm-color',
         cols: 48,
@@ -105,6 +140,8 @@ class BridgeCore {
         cwd: process.cwd(),
         env: { ...process.env, FORCE_COLOR: '0', TERM: 'xterm' }
       });
+
+      this.activeProcesses.set(chatId, ptyProcess);
 
       let output = '';
       
@@ -114,8 +151,15 @@ class BridgeCore {
       });
 
       ptyProcess.onExit(({ exitCode }) => {
+        this.activeProcesses.delete(chatId);
         resolve({ output, exitCode });
       });
+
+      setTimeout(() => {
+        if (this.activeProcesses.get(chatId) === ptyProcess) {
+          ptyProcess.kill();
+        }
+      }, 600000);
     });
   }
 

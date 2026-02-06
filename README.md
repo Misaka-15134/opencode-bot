@@ -29,14 +29,28 @@ Run OpenCode from Telegram, Discord, Slack, WhatsApp, and 13 more platforms.
 
 ## 🚀 Quick Start
 
+### Install from GitHub (Recommended)
 ```bash
-# Install
-npm install -g opencode-bot
+# Install directly from GitHub (npm package name is taken by another project)
+npm install -g github:Misaka-15134/opencode-bot
 
-# Setup
+# Or clone and install manually
+git clone https://github.com/Misaka-15134/opencode-bot.git
+cd opencode-bot
+npm install -g .
+```
+
+### Setup
+```bash
+# Interactive setup
 opencode-bot-setup
 
-# Run
+# Or non-interactive mode (for CI/containers)
+opencode-bot-setup --no-interactive
+```
+
+### Run
+```bash
 opencode-bot
 ```
 

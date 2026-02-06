@@ -203,7 +203,17 @@ async function importFromOpenClaw() {
 
 async function interactiveSetup() {
   console.log('\n🚀 opencode-bot Setup\n');
-  
+
+  const isNonInteractive = process.env.CI || process.argv.includes('--no-interactive');
+
+  if (isNonInteractive) {
+    console.log('Running in non-interactive mode...');
+    console.log('Please manually create config at ~/.config/opencode-bot/config.json');
+    console.log('Example config:');
+    console.log(JSON.stringify(ConfigManager.createDefault(), null, 2));
+    return;
+  }
+
   const hasOpencode = await checkOpencodeInstallation();
   if (!hasOpencode) {
     const installed = await installOpencode();
@@ -214,9 +224,9 @@ async function interactiveSetup() {
   } else {
     console.log('✅ OpenCode CLI found');
   }
-  
+
   let config = ConfigManager.load();
-  
+
   const imported = await importFromOpenClaw();
   if (imported) {
     config.platforms = [...config.platforms, ...imported.platforms];
@@ -224,14 +234,14 @@ async function interactiveSetup() {
       config.opencode.defaultModel = imported.defaultModel;
     }
     ConfigManager.save(config);
-    
+
     console.log('\n✅ Configuration imported from OpenClaw!');
-    
+
     const addMore = clack ? await clack.confirm({
       message: 'Add more platforms?',
       initialValue: false
     }) : false;
-    
+
     if (!addMore) {
       console.log('\n🎉 Setup complete! Run: opencode-bot\n');
       return;
