@@ -74,6 +74,20 @@ Or just type any message to chat with OpenCode!
 | `/stop` | Terminate running OpenCode process |
 | `!doctor` | Check system configuration |
 
+### 🤖 Supported AI Models
+
+Switch between 12+ AI models via `/menu → Models`:
+
+| Provider | Models | Emoji |
+|----------|--------|-------|
+| **Google** | Gemini Flash, Gemini Pro | ✨ 🧠 |
+| **Anthropic** | Claude 3.5 Sonnet, Claude 4 Opus | 🟣 |
+| **DeepSeek** | DeepSeek V3, DeepSeek R1 | 🔵 |
+| **Kimi** | Kimi K2.5 | 🌙 |
+| **Qwen** | Qwen Plus, Qwen Max | 🌸 🚀 |
+| **GLM** | GLM-4, GLM-4V | 📊 🖼️ |
+| **Minimax** | MiniMax | ⚡ |
+
 ### 💬 Platform-Specific Optimizations
 
 Each platform uses its native UI elements for the best experience:
