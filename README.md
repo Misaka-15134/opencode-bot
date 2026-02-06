@@ -67,10 +67,71 @@ Send `/menu` in any connected chat app to access:
 Or just type any message to chat with OpenCode!
 
 ### Commands
-- `/menu` - Open control panel
-- `/new` - Create new session
-- `/stop` - Stop active process
-- `!command` - Run OpenCode command (e.g., `!doctor`, `!plugins`)
+| Command | Description |
+|---------|-------------|
+| `/menu` | Open interactive control panel |
+| `/new` | Start a fresh conversation session |
+| `/stop` | Terminate running OpenCode process |
+| `!doctor` | Check system configuration |
+
+### 💬 Platform-Specific Optimizations
+
+Each platform uses its native UI elements for the best experience:
+
+| Platform | UI Feature | Benefit |
+|----------|------------|---------|
+| Telegram | Inline Keyboard | One-tap menu selection |
+| Discord | Slash Commands | Auto-complete & descriptions |
+| Slack | Block Kit | Rich interactive buttons |
+| WhatsApp | Quick Replies | Fast preset options |
+| LINE | LIFF | Full web app integration |
+| Others | Text Menu | Universal compatibility |
+
+### 🧠 Thinking Mode
+
+Toggle AI thinking visibility:
+- **ON**: Shows reasoning steps before final answer
+- **OFF**: Direct answer (cleaner, faster)
+- Default: OFF
+
+### ⏹️ Process Control
+
+The `/stop` command ensures safe process termination:
+1. Sends SIGTERM (graceful shutdown)
+2. Waits 3s for cleanup
+3. Falls back to SIGKILL if needed
+- Automatically clears typing indicators
+
+### 📂 Session Management
+
+- Each `/new` creates an isolated session
+- Sessions persist across restarts
+- Supports multiple concurrent conversations
+
+### 📡 Streaming Output
+
+OpenCode's streaming output is optimized for chat platforms:
+
+| Platform | Rate Limit | Optimization |
+|----------|------------|--------------|
+| Telegram | ~30 msg/sec | 2-second throttle |
+| Discord | ~5 msg/sec | Message batching |
+| Slack | ~1 msg/sec | Rate-aware sending |
+| Others | Variable | Adaptive throttling |
+
+**Visual Indicators:**
+- `▌` (streaming) - Shows during output
+- Disappears when complete
+- Prevents message spam
+
+### 🔤 Content Safety
+
+All output is sanitized before sending:
+- HTML escaping (prevents injection)
+- Markdown formatting preserved
+- Code blocks syntax highlighted
+
+---
 
 ## 📦 Requirements
 
