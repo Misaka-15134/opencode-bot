@@ -54,6 +54,9 @@ class TelegramAdapter {
       keyboard
         .text('✨ Flash', 'model:google/antigravity-gemini-3-flash')
         .text('🧠 Pro', 'model:google/antigravity-gemini-3-pro').row()
+        .text('🟣 Claude 3.5', 'model:anthropic/claude-sonnet-4-20250506')
+        .text('🟣 Claude 4', 'model:anthropic/claude-opus-4-20250506').row()
+        .text('🔵 DeepSeek', 'model:deepseek/deepseek-chat').row()
         .text('🔙 Back', 'nav:main');
     } else if (page === 'agents') {
       const agents = this.core.listAgents();
