@@ -56,7 +56,14 @@ class TelegramAdapter {
         .text('🧠 Pro', 'model:google/antigravity-gemini-3-pro').row()
         .text('🟣 Claude 3.5', 'model:anthropic/claude-sonnet-4-20250506')
         .text('🟣 Claude 4', 'model:anthropic/claude-opus-4-20250506').row()
-        .text('🔵 DeepSeek', 'model:deepseek/deepseek-chat').row()
+        .text('🔵 DeepSeek V3', 'model:deepseek/deepseek-chat')
+        .text('🔵 DeepSeek R1', 'model:deepseek/deepseek-reasoner').row()
+        .text('🌙 Kimi K2.5', 'model:kimi-coding/k2p5').row()
+        .text('🌸 Qwen Plus', 'model:qwen/qwen-plus')
+        .text('🚀 Qwen Max', 'model:qwen/qwen-max').row()
+        .text('📊 GLM-4', 'model:glm-4')
+        .text('🖼️ GLM-4V', 'model:glm-4v').row()
+        .text('⚡ MiniMax', 'model:minimax/abab6.5s-chat').row()
         .text('🔙 Back', 'nav:main');
     } else if (page === 'agents') {
       const agents = this.core.listAgents();

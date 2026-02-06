@@ -96,8 +96,16 @@ Or just send a message to chat with OpenCode!
     const models = [
       { id: 'google/antigravity-gemini-3-flash', name: '✨ Gemini Flash' },
       { id: 'google/antigravity-gemini-3-pro', name: '🧠 Gemini Pro' },
-      { id: 'anthropic/claude-3.5-sonnet', name: '🔮 Claude 3.5' },
-      { id: 'deepseek/deepseek-r1', name: '🔍 DeepSeek R1' }
+      { id: 'anthropic/claude-sonnet-4-20250506', name: '🟣 Claude 3.5 Sonnet' },
+      { id: 'anthropic/claude-opus-4-20250506', name: '🟣 Claude 4 Opus' },
+      { id: 'deepseek/deepseek-chat', name: '🔵 DeepSeek V3' },
+      { id: 'deepseek/deepseek-reasoner', name: '🔵 DeepSeek R1' },
+      { id: 'kimi-coding/k2p5', name: '🌙 Kimi K2.5' },
+      { id: 'qwen/qwen-plus', name: '🌸 Qwen Plus' },
+      { id: 'qwen/qwen-max', name: '🚀 Qwen Max' },
+      { id: 'glm-4', name: '📊 GLM-4' },
+      { id: 'glm-4v', name: '🖼️ GLM-4V' },
+      { id: 'minimax/abab6.5s-chat', name: '⚡ MiniMax' }
     ];
 
     let text = '🧠 **Select Model**\n\n';
@@ -109,7 +117,7 @@ Or just send a message to chat with OpenCode!
     const msg = await channel.send(text);
     
     const filter = m => !isNaN(m.content) && m.content >= 1 && m.content <= models.length;
-    const collector = channel.createMessageCollector({ filter, max: 1, time: 30000 });
+    const collector = channel.createMessageCollector({ filter, max: 1, time: 60000 });
 
     collector.on('collect', async (m) => {
       const idx = parseInt(m.content) - 1;
