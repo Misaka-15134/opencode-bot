@@ -2,84 +2,42 @@
 
 🚀 **OpenCode in your favorite chat apps**
 
-Run OpenCode from Telegram, Discord, Slack, WhatsApp, and 13 more platforms.
+Connect OpenCode AI assistant to 17+ chat platforms with a single bridge.
 
 [中文](docs/README.zh-CN.md) | [日本語](docs/README.ja.md) | [한국어](docs/README.ko.md)
 
+---
+
 ## ✨ Features
 
-### ✅ All 17 Platforms Ready
+### 🎯 Multi-Platform Support
 
-| Platform | Status | Platform | Status |
-|----------|--------|----------|--------|
-| 📱 Telegram | ✅ Ready | 📋 Mattermost | ✅ Ready |
-| 🎮 Discord | ✅ Ready | 💬 Google Chat | ✅ Ready |
-| 💼 Slack | ✅ Ready | 🔷 Microsoft Teams | ✅ Ready |
-| 💬 WhatsApp | ✅ Ready | 📱 LINE | ✅ Ready |
-| 🔒 Signal | ✅ Ready | 💬 Zalo | ✅ Ready |
-| 🔷 Matrix | ✅ Ready | 💬 iMessage | ✅ Ready |
-| ☁️ Nextcloud Talk | ✅ Ready | 🔵 BlueBubbles | ✅ Ready |
-| ⚡ Nostr | ✅ Ready | 📺 Twitch | ✅ Ready |
-| 🌐 Tlon | ✅ Ready | | |
+| Platform | Status | UI Style |
+|----------|--------|----------|
+| 📱 Telegram | ✅ Ready | Inline Keyboard |
+| 🎮 Discord | ✅ Ready | Slash Commands |
+| 💼 Slack | ✅ Ready | Block Kit |
+| 💬 WhatsApp | ✅ Ready | Quick Replies |
+| 🔒 Signal | ✅ Ready | Text Menu |
+| 🔷 Matrix | ✅ Ready | Buttons |
+| 📋 Mattermost | ✅ Ready | Buttons |
+| 💬 Google Chat | ✅ Ready | Cards |
+| 🔷 Microsoft Teams | ✅ Ready | Cards |
+| 📱 LINE | ✅ Ready | LIFF |
+| 💬 Zalo | ✅ Ready | Buttons |
+| 💬 iMessage | ✅ Ready | Text Menu |
+| 🔵 BlueBubbles | ✅ Ready | Buttons |
+| ☁️ Nextcloud Talk | ✅ Ready | Buttons |
+| ⚡ Nostr | ✅ Ready | Nip-05 |
+| 📺 Twitch | ✅ Ready | Whisper |
+| 🌐 Tlon | ✅ Ready | Urbit |
 
-- **Agent Support**: Sisyphus, Hephaestus, Prometheus, Oracle, Metis, Momus
-- **Model Switching**: Gemini, Claude, DeepSeek
-- **Session Management**: Multiple conversation contexts
-- **OpenClaw Import**: Auto-import your existing config
+### 🤖 AI Model Selection (12+ Models)
 
-## 🚀 Quick Start
+Switch models via `/menu → Models`:
 
-### Install from GitHub (Recommended)
-```bash
-# Install directly from GitHub (npm package name is taken by another project)
-npm install -g github:Misaka-15134/opencode-bot
-
-# Or clone and install manually
-git clone https://github.com/Misaka-15134/opencode-bot.git
-cd opencode-bot
-npm install -g .
-```
-
-### Setup
-```bash
-# Interactive setup
-opencode-bot-setup
-
-# Or non-interactive mode (for CI/containers)
-opencode-bot-setup --no-interactive
-```
-
-### Run
-```bash
-opencode-bot
-```
-
-## 🎮 Usage
-
-Send `/menu` in any connected chat app to access:
-- **Agents** - Switch AI assistants
-- **Models** - Change AI model
-- **Sessions** - Manage conversations
-- **Tools** - Doctor, plugins, auth, config
-- **Thinking Mode** - Show/hide AI thinking process
-- **Stop** - Terminate running process
-
-Or just type any message to chat with OpenCode!
-
-### Commands
-| Command | Description |
-|---------|-------------|
-| `/menu` | Open interactive control panel |
-| `/new` | Start a fresh conversation session |
-| `/stop` | Terminate running OpenCode process |
-| `!doctor` | Check system configuration |
-
-### 🤖 Supported AI Models
-
-Switch between 12+ AI models via `/menu → Models`:
-
-| Provider | Models | Emoji |
-|----------|--------|-------|
+| Provider | Models | Icon |
+|----------|--------|------|
 | **Google** | Gemini Flash, Gemini Pro | ✨ 🧠 |
 | **Anthropic** | Claude 3.5 Sonnet, Claude 4 Opus | 🟣 |
 | **DeepSeek** | DeepSeek V3, DeepSeek R1 | 🔵 |
@@ -88,88 +46,183 @@ Switch between 12+ AI models via `/menu → Models`:
 | **GLM** | GLM-4, GLM-4V | 📊 🖼️ |
 | **Minimax** | MiniMax | ⚡ |
 
-### 💬 Platform-Specific Optimizations
-
-Each platform uses its native UI elements for the best experience:
-
-| Platform | UI Feature | Benefit |
-|----------|------------|---------|
-| Telegram | Inline Keyboard | One-tap menu selection |
-| Discord | Slash Commands | Auto-complete & descriptions |
-| Slack | Block Kit | Rich interactive buttons |
-| WhatsApp | Quick Replies | Fast preset options |
-| LINE | LIFF | Full web app integration |
-| Others | Text Menu | Universal compatibility |
-
 ### 🧠 Thinking Mode
 
-Toggle AI thinking visibility:
-- **ON**: Shows reasoning steps before final answer
+Toggle AI reasoning visibility:
+- **ON**: Shows `<thinking>` blocks with reasoning
 - **OFF**: Direct answer (cleaner, faster)
-- Default: OFF
+- Toggle via `/menu → Toggle Thinking`
 
 ### ⏹️ Process Control
 
-The `/stop` command ensures safe process termination:
-1. Sends SIGTERM (graceful shutdown)
-2. Waits 3s for cleanup
-3. Falls back to SIGKILL if needed
-- Automatically clears typing indicators
+| Command | Action |
+|---------|--------|
+| `/stop` | Graceful SIGTERM → 3s wait → SIGKILL |
+| Clears | Typing indicators, streaming state |
+| Safe | Prevents runaway processes |
 
 ### 📂 Session Management
 
-- Each `/new` creates an isolated session
-- Sessions persist across restarts
-- Supports multiple concurrent conversations
+| Feature | Description |
+|---------|-------------|
+| `/new` | Creates isolated session |
+| Persistence | Sessions saved to disk |
+| Multi-session | Multiple concurrent conversations |
+| Mapping | Chat ID → Session ID mapping |
 
 ### 📡 Streaming Output
 
-OpenCode's streaming output is optimized for chat platforms:
+Optimized for chat platform rate limits:
 
 | Platform | Rate Limit | Optimization |
 |----------|------------|--------------|
 | Telegram | ~30 msg/sec | 2-second throttle |
 | Discord | ~5 msg/sec | Message batching |
-| Slack | ~1 msg/sec | Rate-aware sending |
-| Others | Variable | Adaptive throttling |
+| Slack | ~1 msg/sec | Rate-aware |
+| Others | Variable | Adaptive |
 
-**Visual Indicators:**
-- `▌` (streaming) - Shows during output
-- Disappears when complete
-- Prevents message spam
+**Visual Feedback:**
+- `▌` indicator during streaming
+- `⏳ Processing...` on start
+- `[Process Finished ✅/❌]` on exit
 
 ### 🔤 Content Safety
 
-All output is sanitized before sending:
-- HTML escaping (prevents injection)
-- Markdown formatting preserved
-- Code blocks syntax highlighted
+- HTML escaping (XSS prevention)
+- Markdown preserved
+- Code syntax highlighting
+- Output truncation for long messages
+
+---
+
+## 🚀 Quick Start
+
+### Installation
+
+```bash
+# From GitHub (recommended)
+npm install -g github:Misaka-15134/opencode-bot
+
+# Or from source
+git clone https://github.com/Misaka-15134/opencode-bot.git
+cd opencode-bot
+npm install -g .
+```
+
+### Setup
+
+```bash
+# Interactive setup with guided wizard
+opencode-bot-setup
+
+# Non-interactive mode (CI/containers)
+opencode-bot-setup --no-interactive
+```
+
+### Running
+
+```bash
+opencode-bot
+```
+
+---
+
+## 🎮 Commands
+
+### Chat Commands
+
+| Command | Description |
+|---------|-------------|
+| `/menu` | Open interactive control panel |
+| `/new` | Start new session |
+| `/stop` | Terminate running process |
+| `[message]` | Chat with OpenCode |
+
+### OpenCode Commands
+
+| Command | Description |
+|---------|-------------|
+| `!doctor` | System diagnostics |
+| `!plugins` | Plugin management |
+| `!auth` | Authentication |
+| `!config` | Configuration |
+
+---
+
+## 🔧 Architecture
+
+### Core Components
+
+```
+opencode-bot/
+├── bin/
+│   ├── opencode-bot.js    # Main entry point
+│   └── setup.js           # Interactive setup wizard
+├── src/
+│   ├── adapters/          # Platform adapters (17 total)
+│   │   ├── telegram.js
+│   │   ├── discord.js
+│   │   ├── slack.js
+│   │   └── ...
+│   └── core/
+│       ├── bridge.js      # PTY bridge & streaming
+│       └── config.js      # Config management
+└── docs/                 # Documentation
+```
+
+### PTY Bridge
+
+- Uses `@lydell/node-pty` for real terminal experience
+- Streaming output with 2-second throttle
+- Process lifecycle management
+- Session isolation per chat
+
+### Configuration
+
+| Location | Purpose |
+|----------|---------|
+| `~/.config/opencode-bot/config.json` | Platform tokens & settings |
+| `~/.config/opencode/mobile-bridge.json` | Bridge settings |
+| `~/.local/share/opencode/storage/session/` | Session data |
 
 ---
 
 ## 📦 Requirements
 
-- Node.js >= 18
-- OpenCode CLI (auto-installed if missing)
-- Platform bot tokens
+- **Node.js**: >= 18
+- **OpenCode CLI**: Installed automatically or manually
+- **Platform Tokens**: Telegram Bot Token, Discord Bot Token, etc.
 
-## 🔧 Auto-Installation
+### Auto-Installation
 
 `opencode-bot-setup` automatically installs:
 - ✅ OpenCode CLI (if not found)
 - ✅ Platform-specific npm packages
-- ⚠️ External binaries (manual install required for Signal, iMessage)
+- ⚠️ External binaries (Signal CLI, macOS for iMessage)
+
+---
 
 ## 🔒 Security
 
-- No hardcoded credentials
-- Config stored in `~/.config/opencode-bot/`
-- Tokens never committed to git
+- ✅ No hardcoded credentials
+- ✅ Config stored in user directory
+- ✅ Tokens never committed to git
+- ✅ HTML escaping on all output
+
+---
+
+## 🙏 Credits
+
+Inspired by:
+- [OpenClaw](https://openclaw.ai) - Architecture reference
+- V17 Telegram Bridge - Feature reference
+
+---
 
 ## 📄 License
 
 MIT
 
-## 🙏 Credits
+---
 
-Inspired by [OpenClaw](https://openclaw.ai)
+**Questions? Issues? Pull requests welcome!**
