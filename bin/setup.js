@@ -126,6 +126,29 @@ async function checkOpencodeInstallation() {
           }
         }
       }
+      
+      // Method 5: Check OpenCode config directory (cross-platform)
+      const possibleConfigPaths = [
+        path.join(os.homedir(), '.config', 'opencode'),           // Linux/macOS
+        path.join(os.homedir(), '.opencode'),                     // Legacy location
+        path.join(process.env.USERPROFILE || '', '.config', 'opencode'), // Windows
+        path.join(process.env.USERPROFILE || '', '.opencode'),   // Windows legacy
+      ];
+      
+      for (const configPath of possibleConfigPaths) {
+        if (fs.existsSync(configPath)) {
+          // Check if it looks like OpenCode config (contains config.json or opencode.json)
+          try {
+            const dirContents = fs.readdirSync(configPath);
+            const hasConfig = dirContents.some(f => f.includes('config') || f.includes('opencode'));
+            if (hasConfig) {
+              return true;
+            }
+          } catch {
+            // Continue to next path
+          }
+        }
+      }
     }
     
     return false;
