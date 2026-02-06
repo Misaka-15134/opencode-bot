@@ -93,11 +93,12 @@ class SlackAdapter {
     });
   }
 
-  onStreamData(channelId, text) {
+  onStreamData(channelId, text, final = false) {
     const msgData = this.messages[channelId];
     if (!msgData) return;
 
-    const formatted = '```\n' + text.slice(-2900) + '\n```';
+    const content = final ? text : text + '\n\n⏳ Processing...';
+    const formatted = '```\n' + content.slice(-2900) + '\n```';
     
     this.app.client.chat.update({
       channel: channelId,

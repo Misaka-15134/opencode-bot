@@ -7,6 +7,20 @@ const { ConfigManager } = require('./config');
 
 const SESSION_DIR = path.join(os.homedir(), '.local/share/opencode/storage/session/global');
 const SESSION_MAP_PATH = path.join(os.homedir(), '.config/opencode-bot/session-map.json');
+const SETTINGS_PATH = path.join(os.homedir(), '.config/opencode-bot/settings.json');
+
+function stripAnsi(str) {
+  return str.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-z]/g, '');
+}
+
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
 
 class BridgeCore {
   constructor(config) {
@@ -14,6 +28,7 @@ class BridgeCore {
     this.opencodePath = ConfigManager.getOpencodePath();
     this.sessionMap = this._loadSessionMap();
     this.activeProcesses = new Map();
+    this.userSettings = this._loadSettings();
   }
 
   _loadSessionMap() {
@@ -34,6 +49,40 @@ class BridgeCore {
     } catch (e) {
       console.error('Failed to save session map:', e.message);
     }
+  }
+
+  _loadSettings() {
+    try {
+      if (fs.existsSync(SETTINGS_PATH)) {
+        return JSON.parse(fs.readFileSync(SETTINGS_PATH, 'utf8'));
+      }
+    } catch (e) {
+      console.error('Failed to load settings:', e.message);
+    }
+    return {};
+  }
+
+  _saveSettings() {
+    try {
+      fs.mkdirSync(path.dirname(SETTINGS_PATH), { recursive: true });
+      fs.writeFileSync(SETTINGS_PATH, JSON.stringify(this.userSettings, null, 2));
+    } catch (e) {
+      console.error('Failed to save settings:', e.message);
+    }
+  }
+
+  getSettings(chatId) {
+    if (!this.userSettings[chatId]) {
+      this.userSettings[chatId] = { thinkingMode: false, verbose: true };
+    }
+    return this.userSettings[chatId];
+  }
+
+  toggleThinking(chatId) {
+    const settings = this.getSettings(chatId);
+    settings.thinkingMode = !settings.thinkingMode;
+    this._saveSettings();
+    return settings.thinkingMode;
   }
 
   stopProcess(chatId) {
@@ -72,8 +121,8 @@ class BridgeCore {
     const emptySession = {
       id: randomId,
       slug: `bot-${Date.now()}`,
-      title: "New Session",
-      projectID: "global",
+      title: 'New Session',
+      projectID: 'global',
       directory: process.cwd(),
       time: { created: now, updated: now },
       messages: []
@@ -85,7 +134,7 @@ class BridgeCore {
   }
 
   getSession(chatId) {
-    return this.sessionMap[chatId] || `ses_tg_${String(chatId).replace(/[^a-zA-Z0-9]/g, "")}`;
+    return this.sessionMap[chatId] || `ses_tg_${String(chatId).replace(/[^a-zA-Z0-9]/g, '')}`;
   }
 
   listSessions() {
@@ -135,7 +184,7 @@ class BridgeCore {
 
       const ptyProcess = pty.spawn(this.opencodePath, args, {
         name: 'xterm-color',
-        cols: 48,
+        cols: 60,
         rows: 30,
         cwd: process.cwd(),
         env: { ...process.env, FORCE_COLOR: '0', TERM: 'xterm' }
@@ -143,16 +192,32 @@ class BridgeCore {
 
       this.activeProcesses.set(chatId, ptyProcess);
 
-      let output = '';
-      
+      let fullOutput = '';
+      let lastUpdate = Date.now();
+      const settings = this.getSettings(chatId);
+
+      const throttledUpdate = async (final = false) => {
+        const now = Date.now();
+        if (!final && now - lastUpdate < 2000) return;
+        lastUpdate = now;
+
+        let display = this._formatForDisplay(stripAnsi(fullOutput), settings.thinkingMode);
+        if (!display && !final) return;
+        if (display.length > 3500) display = '...' + display.substring(display.length - 3500);
+        
+        adapter.onStreamData && adapter.onStreamData(chatId, escapeHtml(display), final);
+      };
+
       ptyProcess.onData((data) => {
-        output += data;
-        adapter.onStreamData && adapter.onStreamData(chatId, this._format(output));
+        fullOutput += data;
+        throttledUpdate();
       });
 
       ptyProcess.onExit(({ exitCode }) => {
         this.activeProcesses.delete(chatId);
-        resolve({ output, exitCode });
+        fullOutput += `\n[Process Finished ${exitCode === 0 ? '✅' : '❌'}]`;
+        throttledUpdate(true);
+        resolve({ output: fullOutput, exitCode });
       });
 
       setTimeout(() => {
@@ -163,13 +228,21 @@ class BridgeCore {
     });
   }
 
-  _format(text) {
-    return text
-      .replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-z]/g, '')
-      .replace(/\r/g, '')
+  _formatForDisplay(text, showThinking) {
+    let formatted = text.replace(/\r/g, '');
+    
+    if (!showThinking) {
+      formatted = formatted.replace(/<thinking>[\s\S]*?<\/thinking>/g, '💭 <i>(Thinking...)</i>\n');
+    }
+
+    return formatted
       .replace(/INFO/g, 'ℹ️')
       .replace(/WARN/g, '⚠️')
-      .replace(/ERROR/g, '❌');
+      .replace(/ERROR/g, '❌')
+      .replace(/DEBUG/g, '🔍')
+      .split('\n')
+      .filter(l => l.trim().length > 0)
+      .join('\n');
   }
 }
 

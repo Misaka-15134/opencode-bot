@@ -61,8 +61,16 @@ Send `/menu` in any connected chat app to access:
 - **Models** - Change AI model
 - **Sessions** - Manage conversations
 - **Tools** - Doctor, plugins, auth, config
+- **Thinking Mode** - Show/hide AI thinking process
+- **Stop** - Terminate running process
 
 Or just type any message to chat with OpenCode!
+
+### Commands
+- `/menu` - Open control panel
+- `/new` - Create new session
+- `/stop` - Stop active process
+- `!command` - Run OpenCode command (e.g., `!doctor`, `!plugins`)
 
 ## 📦 Requirements
 

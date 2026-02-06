@@ -140,11 +140,13 @@ Or just send a message to chat with OpenCode!
     await interaction.deferUpdate();
   }
 
-  onStreamData(channelId, text) {
+  onStreamData(channelId, text, final = false) {
     const msgData = this.messages[channelId];
     if (!msgData) return;
 
-    const formatted = '```\n' + text.slice(-1900) + '\n```';
+    const content = final ? text : text + '\n\n⏳ Processing...';
+    const formatted = '```\n' + content.slice(0, 1900) + '\n```';
+    
     msgData.message.edit(formatted).catch(() => {});
   }
 
