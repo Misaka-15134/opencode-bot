@@ -85,10 +85,49 @@ async function installDependencies(platforms) {
 }
 
 async function checkOpencodeInstallation() {
+  const platform = os.platform();
+  
   try {
-    execSync('which opencode', { stdio: 'pipe' });
+    // Method 1: Try platform-specific command
+    if (platform === 'win32') {
+      // Windows: use where command
+      execSync('where opencode', { stdio: 'pipe' });
+    } else {
+      // Unix/Linux/macOS: use which command
+      execSync('which opencode', { stdio: 'pipe' });
+    }
     return true;
   } catch {
+    // Method 2: Check npm global prefix for Windows
+    try {
+      const npmPrefix = execSync('npm config get prefix', { encoding: 'utf8' }).trim();
+      const opencodePath = path.join(npmPrefix, platform === 'win32' ? 'opencode.cmd' : 'bin', 'opencode');
+      if (fs.existsSync(opencodePath)) {
+        return true;
+      }
+    } catch {
+      // npm prefix check failed, continue
+    }
+    
+    // Method 3: Try running opencode --version
+    try {
+      execSync('opencode --version', { stdio: 'pipe', timeout: 5000 });
+      return true;
+    } catch {
+      // Method 4: Check common Windows user install locations
+      if (platform === 'win32') {
+        const possiblePaths = [
+          path.join(process.env.USERPROFILE || '', 'AppData', 'Roaming', 'npm', 'opencode.cmd'),
+          path.join(process.env.USERPROFILE || '', 'AppData', 'Roaming', 'npm', 'opencode.exe'),
+        ];
+        for (const p of possiblePaths) {
+          if (fs.existsSync(p)) {
+            return true;
+          }
+        }
+      }
+    }
+    
     return false;
   }
 }
